@@ -1,5 +1,5 @@
 /**********************************
-tcp_ser.c: the source file of the server in tcp transmission 
+tcp_ser.c: the source file of the server in tcp transmission
 ***********************************/
 
 
@@ -25,7 +25,7 @@ int main(void)
 		printf("error in socket!");
 		exit(1);
 	}
-	
+
 	my_addr.sin_family = AF_INET;
 	my_addr.sin_port = htons(MYTCP_PORT);
 	my_addr.sin_addr.s_addr = htonl(INADDR_ANY);//inet_addr("172.0.0.1");
@@ -36,7 +36,7 @@ int main(void)
 		printf("error in binding");
 		exit(1);
 	}
-	
+
 	ret = listen(sockfd, BACKLOG);                              //listen
 	if (ret <0) {
 		printf("error in listening");
@@ -54,14 +54,14 @@ int main(void)
 			exit(1);
 		}
 
-		if ((pid = fork())==0)                                         // creat acception process
+		if ((pid = fork())==0)                // create acception process
 		{
 			close(sockfd);
-			str_ser(con_fd);                                          //receive packet and response
+			str_ser(con_fd);                    // receive packet and response
 			close(con_fd);
 			exit(0);
 		}
-		else close(con_fd);                                         //parent process
+		else close(con_fd);                   // parent process
 	}
 	close(sockfd);
 	exit(0);
@@ -76,17 +76,17 @@ void str_ser(int sockfd)
 	int end, n = 0;
 	long lseek=0;
 	end = 0;
-	
+
 	printf("receiving data!\n");
 
 	while(!end)
 	{
-		if ((n= recv(sockfd, &recvs, DATALEN, 0))==-1)                                   //receive the packet
+		if ((n= recv(sockfd, &recvs, DATALEN, 0))==-1)      // receive the packet
 		{
 			printf("error when receiving\n");
 			exit(1);
 		}
-		if (recvs[n-1] == '\0')									//if it is the end of the file
+		if (recvs[n-1] == '\0')									// if it is the end of the file
 		{
 			end = 1;
 			n --;
@@ -98,7 +98,7 @@ void str_ser(int sockfd)
 	ack.len = 0;
 	if ((n = send(sockfd, &ack, 2, 0))==-1)
 	{
-			printf("send error!");								//send the ack
+			printf("send error!");								// send the ack
 			exit(1);
 	}
 	if ((fp = fopen ("myTCPreceive.txt","wt")) == NULL)
@@ -106,7 +106,7 @@ void str_ser(int sockfd)
 		printf("File doesn't exit\n");
 		exit(0);
 	}
-	fwrite (buf , 1 , lseek , fp);					//write data into file
+	fwrite (buf , 1 , lseek , fp);					// write data into file
 	fclose(fp);
 	printf("a file has been successfully received!\nthe total data received is %d bytes\n", (int)lseek);
 }
