@@ -84,7 +84,6 @@ int main(int argc, char **argv) {
           ti, (int) len, rt);
   fclose(resultsfp);
 
-
   close(sockfd);
   fclose(fp);
 
@@ -124,14 +123,23 @@ float str_cli(FILE *fp, int sockfd, long *len) {
   buf[lsize] = '\0';            // append the end byte
   gettimeofday(&sendt, NULL);  // get the current time
 
-  // First packet to send
-  memcpy(sends, (buf + ci), DATALEN);
-  n = send(sockfd, &sends, DATALEN, 0);
-  if (n == -1) {
-    printf("send error!");  // Throw exception and exit when not able to send
-    exit(1);
+  while (ci <= lsize) {  // while file has not reached the end
+    if ((lsize + 1 - ci) <= DATALEN) {  // check for near end of file
+      slen = lsize + 1 - ci;
+    } else {
+      slen = DATALEN;
+    }
+
+    memcpy(sends, (buf + ci), slen);  // Copies slen characters from memory area
+                                      // (buf+ci) to sends
+
+    n = send(sockfd, &sends, slen, 0);
+    if (n == -1) {
+      printf("send error!");  // Throw exception and exit when not able to send
+      exit(1);
+    }
+    ci += slen;
   }
-  ci += DATALEN;
 
   ackpacket = recv(sockfd, &ack, 2, 0);
   if (ackpacket == -1) {                  //receive the ack
@@ -140,61 +148,6 @@ float str_cli(FILE *fp, int sockfd, long *len) {
   }
   if (ack.num != 1 || ack.len != 0) {
     printf("error in transmission\n");
-  }
-
-  // printf("[DEBUG] First packet sent\n");
-
-  // Subsequent packets to send
-  while (ci <= lsize) {  // while file has not reached the end
-    trackstatus++;
-
-    if (trackstatus % 2 == 0) {   // Even interval
-      for (int i = 0; i < 2; i++) {
-        if ((lsize + 1 - ci) <= DATALEN) {  // check for near end of file
-          slen = lsize + 1 - ci;
-        } else {
-          slen = DATALEN;
-        }
-
-        memcpy(sends, (buf + ci), slen);  // Copies slen characters from memory area
-                                          // (buf+ci) to sends
-
-        n = send(sockfd, &sends, slen, 0);
-        if (n == -1) {
-          printf("send error!");  // Throw exception and exit when not able to send
-          exit(1);
-        }
-        ci += slen;
-      }
-      // printf("[DEBUG] Even interval\n");
-    } else {                      // Odd interval
-      if ((lsize + 1 - ci) <= DATALEN) {  // check for near end of file
-        slen = lsize + 1 - ci;
-      } else {
-        slen = DATALEN;
-      }
-
-      memcpy(sends, (buf + ci), slen);  // Copies slen characters from memory area
-                                        // (buf+ci) to sends
-
-      n = send(sockfd, &sends, slen, 0);
-      if (n == -1) {
-        printf("send error!");  // Throw exception and exit when not able to send
-        exit(1);
-      }
-      ci += slen;
-      // printf("[DEBUG] Odd interval\n");
-    }
-
-    ackpacket = recv(sockfd, &ack, 2, 0);
-    if (ackpacket == -1) {                  //receive the ack
-      printf("error when receiving ack\n");
-      exit(1);
-    }
-    if (ack.num != 1 || ack.len != 0) {
-      printf("error in transmission\n");
-    }
-    // printf("[DEBUG] Packet set acknowledged: %d\n", trackstatus);
   }
 
   gettimeofday(&recvt, NULL);                 // get current time

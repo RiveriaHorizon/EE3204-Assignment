@@ -1,0 +1,12 @@
+Time(ms) : 4.482, Data sent(byte): 59793
+Data rate: 13340.696289 (Kbytes/s)
+Time(ms) : 4.346, Data sent(byte): 59793
+Data rate: 13758.167969 (Kbytes/s)
+Time(ms) : 3.949, Data sent(byte): 59793
+Data rate: 15141.301758 (Kbytes/s)
+Time(ms) : 3.756, Data sent(byte): 59793
+Data rate: 15919.329102 (Kbytes/s)
+Time(ms) : 3.674, Data sent(byte): 59793
+Data rate: 16274.632812 (Kbytes/s)
+Time(ms) : 3.961, Data sent(byte): 59793
+Data rate: 15095.430664 (Kbytes/s)
