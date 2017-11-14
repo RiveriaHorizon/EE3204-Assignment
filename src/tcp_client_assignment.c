@@ -35,6 +35,7 @@ int main(int argc, char **argv)
 	printf("canonical name: %s\n", sh->h_name);
 	for (pptr=sh->h_aliases; *pptr != NULL; pptr++)
 		printf("the aliases name is: %s\n", *pptr);
+
 	switch(sh->h_addrtype)
 	{
 		case AF_INET:
