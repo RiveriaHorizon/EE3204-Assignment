@@ -73,15 +73,10 @@ void str_ser(int sockfd) {
   printf("receiving data!\n");
 
   while (!end) {
-    if (trackstatus == 2) {
+    if (trackstatus == 3) {
       trackstatus = 0;
     }
-
-    if (trackstatus == 0) {   // Receive at even interval
-      n = recv(sockfd, &recvs, DATALEN / 2, 0);
-    } else {
-      n = recv(sockfd, &recvs, DATALEN, 0);
-    }
+    n = recv(sockfd, &recvs, DATALEN, 0);
     // printf("[DEBUG] Received byte size: %d\n", n);
 
     if (n == -1) {  // receive the packet
@@ -97,14 +92,14 @@ void str_ser(int sockfd) {
     memcpy((buf + lseek), recvs, n);
     lseek += n;
 
-    // if (trackstatus == 0 || trackstatus == 2) {  // If receiving 2 packets, wait till next then set to 0
-    ack.num = 1;
-    ack.len = 0;
-    if ((n = send(sockfd, &ack, 2, 0)) == -1) {
-      printf("send error!");                // send the ack
-      exit(1);
+    if (trackstatus == 0 || trackstatus == 2) {  // If receiving 2 packets, wait till next then set to 0
+      ack.num = 1;
+      ack.len = 0;
+      if ((n = send(sockfd, &ack, 2, 0)) == -1) {
+        printf("send error!");                // send the ack
+        exit(1);
+      }
     }
-    // }
     // printf("[DEBUG] trackstatus: %d\n", trackstatus);
     trackstatus++;
   }

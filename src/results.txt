@@ -10,7 +10,3 @@ Time(ms) : 3.674, Data sent(byte): 59793
 Data rate: 16274.632812 (Kbytes/s)
 Time(ms) : 3.961, Data sent(byte): 59793
 Data rate: 15095.430664 (Kbytes/s)
-Time(ms) : 18.091, Data sent(byte): 59793
-Data rate: 3305.124268 (Kbytes/s)
-Time(ms) : 25.490, Data sent(byte): 59793
-Data rate: 2345.743408 (Kbytes/s)
