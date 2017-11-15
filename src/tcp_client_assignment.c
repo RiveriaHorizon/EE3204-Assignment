@@ -84,7 +84,6 @@ int main(int argc, char **argv) {
           ti, (int) len, rt);
   fclose(resultsfp);
 
-
   close(sockfd);
   fclose(fp);
 
@@ -149,23 +148,22 @@ float str_cli(FILE *fp, int sockfd, long *len) {
     trackstatus++;
 
     if (trackstatus % 2 == 0) {   // Even interval
-      for (int i = 0; i < 2; i++) {
-        if ((lsize + 1 - ci) <= DATALEN) {  // check for near end of file
-          slen = lsize + 1 - ci;
-        } else {
-          slen = DATALEN;
-        }
-
-        memcpy(sends, (buf + ci), slen);  // Copies slen characters from memory area
-                                          // (buf+ci) to sends
-
-        n = send(sockfd, &sends, slen, 0);
-        if (n == -1) {
-          printf("send error!");  // Throw exception and exit when not able to send
-          exit(1);
-        }
-        ci += slen;
+      if ((lsize + 1 - ci) <= DATALEN / 2) {  // check for near end of file
+        slen = lsize + 1 - ci;
+      } else {
+        slen = DATALEN / 2;
       }
+
+      memcpy(sends, (buf + ci), slen);  // Copies slen characters from memory area
+                                        // (buf+ci) to sends
+
+      n = send(sockfd, &sends, slen, 0);
+      if (n == -1) {
+        printf("send error!");  // Throw exception and exit when not able to send
+        exit(1);
+      }
+      ci += slen;
+
       // printf("[DEBUG] Even interval\n");
     } else {                      // Odd interval
       if ((lsize + 1 - ci) <= DATALEN) {  // check for near end of file
