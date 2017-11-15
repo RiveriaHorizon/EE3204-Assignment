@@ -3,7 +3,6 @@
  ********************************/
 
 #include "headsock.h"
-#include "xlsxwriter.h"
 
 // transmission function
 float str_cli(FILE *fp, int sockfd, long *len);
