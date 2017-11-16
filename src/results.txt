@@ -8,3 +8,5 @@ Time(ms) : 89.574, Data sent(byte): 61873
 Data rate: 690.747314 (Kbytes/s)
 Time(ms) : 79.267, Data sent(byte): 61873
 Data rate: 780.564453 (Kbytes/s)
+Time(ms) : 11.669, Data sent(byte): 59793
+Data rate: 5124.089844 (Kbytes/s)
